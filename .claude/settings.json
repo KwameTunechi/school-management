@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \"const r = require\\(''c:/Users/evans/school-management/school-mgmt/node_modules/@react-pdf/renderer''\\); console.log\\(Object.keys\\(r\\).filter\\(k => /image|Image/i.test\\(k\\)\\)\\)\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\evans\\school-management\\school-mgmt\\app\\api\\auth",
+      "c:\\Users\\evans\\school-management\\school-mgmt\\app\\admin\\teachers\\[id]",
+      "c:\\Users\\evans\\school-management\\school-mgmt\\app\\teacher\\marks\\[classId]"
+    ]
+  }
+}
