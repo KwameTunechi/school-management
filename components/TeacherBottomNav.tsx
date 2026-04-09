@@ -3,16 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const NAVY = '#0d1b2a';
-const GOLD  = '#c9952a';
-
 const TABS = [
   {
     href: '/teacher',
     label: 'Home',
     exact: true,
     icon: (active: boolean) => (
-      <svg className="w-6 h-6" fill={active ? NAVY : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-6 h-6" fill={active ? '#0d1b2a' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8}
           d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
       </svg>
@@ -73,27 +70,34 @@ export function TeacherBottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 inset-x-0 z-50 sm:hidden border-t border-gray-200 bg-white"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      className="fixed bottom-0 inset-x-0 z-50 sm:hidden bg-white"
+      style={{
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        borderTop: '1px solid #e8eaed',
+        boxShadow: '0 -4px 20px rgba(0,0,0,0.06)',
+      }}
     >
-      <div className="flex">
+      <div className="flex px-1 py-1.5">
         {TABS.map((tab) => {
           const active = isActive(tab);
           return (
             <Link
               key={tab.href}
               href={tab.href}
-              className="flex-1 flex flex-col items-center gap-0.5 py-2 transition-colors"
-              style={{ color: active ? NAVY : '#9ca3af' }}
+              className="flex-1 flex flex-col items-center gap-1 py-1.5 px-1 rounded-xl transition-all duration-150"
+              style={{
+                color: active ? '#0d1b2a' : '#9ca3af',
+                backgroundColor: active ? 'rgba(13,27,42,0.06)' : 'transparent',
+              }}
             >
               {tab.icon(active)}
-              <span className={`text-[10px] font-medium ${active ? 'font-semibold' : ''}`}>
+              <span className="text-[10px] font-semibold tracking-wide">
                 {tab.label}
               </span>
               {active && (
                 <span
-                  className="absolute bottom-0 w-8 h-0.5 rounded-t-full"
-                  style={{ backgroundColor: GOLD }}
+                  className="w-1 h-1 rounded-full"
+                  style={{ backgroundColor: '#c9952a' }}
                 />
               )}
             </Link>

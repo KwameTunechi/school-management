@@ -1,3 +1,5 @@
+'use client';
+
 interface FormFieldProps {
   label: string;
   name: string;
@@ -15,9 +17,10 @@ export function FormField({
     <div>
       <label
         htmlFor={name}
-        className="block text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1.5"
+        className="block text-xs font-semibold uppercase tracking-widest mb-2"
+        style={{ color: '#6b7280' }}
       >
-        {label}{required && <span className="text-red-400 ml-0.5">*</span>}
+        {label}{required && <span className="ml-0.5" style={{ color: '#ef4444' }}>*</span>}
       </label>
       <input
         id={name}
@@ -26,11 +29,13 @@ export function FormField({
         defaultValue={defaultValue}
         required={required}
         placeholder={placeholder}
-        className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm text-gray-900
-          placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0d1b2a]/20
-          focus:border-[#0d1b2a] transition-colors"
+        className="w-full px-4 py-3 rounded-xl border text-sm text-gray-900
+          placeholder-gray-400 outline-none transition-all duration-150 bg-white"
+        style={{ borderColor: '#e8eaed' }}
+        onFocus={e => { e.currentTarget.style.borderColor = '#c9952a'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(201,149,42,0.12)'; }}
+        onBlur={e  => { e.currentTarget.style.borderColor = '#e8eaed'; e.currentTarget.style.boxShadow = ''; }}
       />
-      {hint && <p className="text-xs text-gray-400 mt-1">{hint}</p>}
+      {hint && <p className="text-xs mt-1.5" style={{ color: '#9ca3af' }}>{hint}</p>}
     </div>
   );
 }
@@ -41,15 +46,20 @@ interface AlertProps {
 }
 
 export function Alert({ type, message }: AlertProps) {
-  const styles = type === 'error'
-    ? 'bg-red-50 border-red-200 text-red-700'
-    : 'bg-green-50 border-green-200 text-green-700';
-  const icon = type === 'error'
+  const isError = type === 'error';
+  const icon = isError
     ? 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
     : 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z';
 
   return (
-    <div className={`flex items-center gap-2 border rounded-lg px-4 py-3 text-sm ${styles}`}>
+    <div
+      className="flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm border"
+      style={{
+        backgroundColor: isError ? '#fef2f2' : '#f0fdf4',
+        borderColor:     isError ? '#fecaca' : '#bbf7d0',
+        color:           isError ? '#dc2626' : '#16a34a',
+      }}
+    >
       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
       </svg>
@@ -68,8 +78,8 @@ export function PageHeader({ title, subtitle, action }: PageHeaderProps) {
   return (
     <div className="flex items-start justify-between mb-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>}
+        <h1 className="text-xl font-bold" style={{ color: '#0d1b2a' }}>{title}</h1>
+        {subtitle && <p className="text-sm mt-0.5" style={{ color: '#9ca3af' }}>{subtitle}</p>}
       </div>
       {action}
     </div>

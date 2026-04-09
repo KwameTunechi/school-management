@@ -4,9 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
-const NAVY = '#0d1b2a';
-const GOLD  = '#c9952a';
-
 interface Props {
   fullName: string;
   email: string;
@@ -105,88 +102,121 @@ export function AdminSidebar({ fullName, email, isOpen = false, onClose }: Props
     return exact ? pathname === href : pathname.startsWith(href);
   }
 
-  return (
-    <>
-      {/* Sidebar — fixed drawer on mobile, static on desktop */}
-      <aside
-        className={[
-          'fixed inset-y-0 left-0 z-50 flex flex-col w-64 shrink-0 transition-transform duration-300',
-          'lg:relative lg:translate-x-0 lg:z-auto',
-          isOpen ? 'translate-x-0' : '-translate-x-full',
-        ].join(' ')}
-        style={{ backgroundColor: NAVY }}
-      >
-        {/* Gold accent */}
-        <div className="h-1 shrink-0" style={{ backgroundColor: GOLD }} />
+  const initials = fullName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
-        {/* Header */}
-        <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+  return (
+    <aside
+      className={[
+        'fixed inset-y-0 left-0 z-50 flex flex-col w-64 shrink-0 transition-transform duration-300 ease-in-out',
+        'lg:relative lg:translate-x-0 lg:z-auto',
+        isOpen ? 'translate-x-0' : '-translate-x-full',
+      ].join(' ')}
+      style={{ background: 'linear-gradient(180deg, #0d1b2a 0%, #132236 100%)' }}
+    >
+      {/* Top gold stripe */}
+      <div className="h-0.5 shrink-0" style={{ background: 'linear-gradient(90deg, #c9952a, #e8b84b, #c9952a)' }} />
+
+      {/* Header */}
+      <div className="px-5 pt-5 pb-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+            style={{ backgroundColor: 'rgba(201,149,42,0.15)', border: '1px solid rgba(201,149,42,0.25)' }}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="#c9952a" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                d="M12 14l9-5-9-5-9 5 9 5z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            </svg>
+          </div>
           <div>
-            <p className="text-xs tracking-widest uppercase font-medium mb-0.5" style={{ color: GOLD }}>
+            <h1 className="text-white font-bold text-sm leading-tight">KGMBS</h1>
+            <p className="text-[10px] tracking-widest uppercase font-medium" style={{ color: '#c9952a' }}>
               Admin Panel
             </p>
-            <h1 className="text-white font-bold text-sm leading-tight">KGMBS</h1>
           </div>
-          {/* Close button — mobile only */}
-          <button
-            onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="Close menu"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
         </div>
+        {/* Close — mobile only */}
+        <button
+          onClick={onClose}
+          className="lg:hidden p-1.5 rounded-lg text-white/50 hover:text-white hover:bg-white/10 transition-colors"
+          aria-label="Close menu"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-          {NAV_ITEMS.map(({ href, label, icon, exact }) => {
-            const active = isActive(href, exact);
-            return (
-              <Link
-                key={href}
-                href={href}
-                onClick={onClose}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
-                style={{
-                  backgroundColor: active ? GOLD + '22' : 'transparent',
-                  color: active ? GOLD : 'rgba(255,255,255,0.7)',
-                }}
-              >
-                <span style={{ color: active ? GOLD : 'rgba(255,255,255,0.5)' }}>{icon}</span>
-                {label}
-              </Link>
-            );
-          })}
-        </nav>
+      {/* Divider */}
+      <div className="mx-5 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.07)' }} />
 
-        {/* User + sign out */}
-        <div className="px-3 py-4 border-t border-white/10">
-          <div className="flex items-center gap-3 px-3 py-2 mb-2">
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-              style={{ backgroundColor: GOLD, color: NAVY }}
+      {/* Navigation */}
+      <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+        <p className="px-3 mb-2 text-[10px] uppercase tracking-widest font-semibold" style={{ color: 'rgba(255,255,255,0.25)' }}>
+          Menu
+        </p>
+        {NAV_ITEMS.map(({ href, label, icon, exact }) => {
+          const active = isActive(href, exact);
+          return (
+            <Link
+              key={href}
+              href={href}
+              onClick={onClose}
+              className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150"
+              style={{
+                backgroundColor: active ? 'rgba(201,149,42,0.12)' : 'transparent',
+                color: active ? '#c9952a' : 'rgba(255,255,255,0.6)',
+              }}
+              onMouseEnter={e => { if (!active) e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = active ? '#c9952a' : 'rgba(255,255,255,0.9)'; }}
+              onMouseLeave={e => { if (!active) e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = active ? '#c9952a' : 'rgba(255,255,255,0.6)'; }}
             >
-              {fullName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()}
-            </div>
-            <div className="min-w-0">
-              <p className="text-white text-xs font-semibold truncate">{fullName}</p>
-              <p className="text-white/40 text-xs truncate">{email}</p>
-            </div>
-          </div>
-          <button
-            onClick={() => signOut({ callbackUrl: '/login' })}
-            className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/5 transition-colors"
+              {/* Left active indicator */}
+              {active && (
+                <span
+                  className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full"
+                  style={{ backgroundColor: '#c9952a' }}
+                />
+              )}
+              <span style={{ color: active ? '#c9952a' : 'rgba(255,255,255,0.4)' }}>{icon}</span>
+              {label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Divider */}
+      <div className="mx-5 h-px" style={{ backgroundColor: 'rgba(255,255,255,0.07)' }} />
+
+      {/* User + sign out */}
+      <div className="px-3 py-4 space-y-1">
+        <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
+            style={{ backgroundColor: '#c9952a', color: '#0d1b2a' }}
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Sign Out
-          </button>
+            {initials}
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-white text-xs font-semibold truncate">{fullName}</p>
+            <p className="text-xs truncate" style={{ color: 'rgba(255,255,255,0.35)' }}>{email}</p>
+          </div>
         </div>
-      </aside>
-    </>
+        <button
+          onClick={() => signOut({ callbackUrl: '/login' })}
+          className="flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl text-sm transition-all duration-150"
+          style={{ color: 'rgba(255,255,255,0.45)' }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; }}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+          Sign Out
+        </button>
+      </div>
+    </aside>
   );
 }
