@@ -5,8 +5,6 @@ import { authOptions } from '@/lib/auth';
 import getDb from '@/lib/db';
 import { MarksTable } from '@/components/MarksTable';
 
-const NAVY = '#0d1b2a';
-const GOLD = '#c9952a';
 
 interface Student {
   dbId: number;
@@ -66,50 +64,50 @@ export default async function MarksPage(props: PageProps<'/teacher/marks/[classI
 
   return (
     <div className="space-y-5">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-gray-500">
-        <Link href="/teacher" className="hover:text-gray-900 transition-colors">Home</Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">
-          {className} — {subject.name}
-        </span>
-      </div>
 
-      {/* Page header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-gray-900">Enter Marks</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
-            <span
-              className="inline-block font-mono text-xs font-semibold px-2 py-0.5 rounded mr-2"
-              style={{ backgroundColor: GOLD + '1a', color: NAVY }}
-            >
-              {subject.code}
-            </span>
-            {subject.name} &nbsp;·&nbsp; {className} &nbsp;·&nbsp; {students.length} student{students.length !== 1 ? 's' : ''}
-          </p>
-        </div>
+      {/* Back link */}
+      <div>
         <Link
-          href="/teacher"
-          className="text-sm text-gray-500 hover:text-gray-900 transition-colors whitespace-nowrap"
+          href="/teacher/marks"
+          className="inline-flex items-center gap-1 text-xs font-semibold mb-3 transition-colors"
+          style={{ color: '#9ca3af' }}
         >
-          ← Back
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to Marks
         </Link>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold" style={{ color: '#0d1b2a' }}>Enter Marks</h1>
+            <div className="flex items-center gap-2 mt-1 flex-wrap">
+              <span
+                className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg"
+                style={{ backgroundColor: 'rgba(201,149,42,0.1)', color: '#0d1b2a' }}
+              >
+                {subject.code}
+              </span>
+              <span className="text-sm" style={{ color: '#9ca3af' }}>
+                {subject.name} · {className} · {students.length} student{students.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Scoring rules */}
+      {/* Scoring rules info banner */}
       <div
-        className="rounded-xl px-4 py-3 text-xs text-gray-600 flex flex-wrap gap-x-6 gap-y-1"
-        style={{ backgroundColor: GOLD + '14', borderLeft: `3px solid ${GOLD}` }}
+        className="rounded-xl px-4 py-3 text-xs flex flex-wrap gap-x-6 gap-y-1"
+        style={{ backgroundColor: 'rgba(201,149,42,0.08)', borderLeft: '3px solid #c9952a', color: '#6b7280' }}
       >
-        <span><strong>Class Score:</strong> 0 – 30</span>
-        <span><strong>Exam Score:</strong> 0 – 70</span>
-        <span><strong>Total:</strong> 0 – 100 (auto-calculated)</span>
+        <span><strong style={{ color: '#0d1b2a' }}>Class Score:</strong> 0 – 30</span>
+        <span><strong style={{ color: '#0d1b2a' }}>Exam Score:</strong> 0 – 70</span>
+        <span><strong style={{ color: '#0d1b2a' }}>Total:</strong> auto-calculated</span>
         <span>Leave both blank to skip a student.</span>
       </div>
 
       {/* Marks table */}
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-6">
+      <div className="bg-white rounded-2xl p-4 sm:p-6" style={{ border: '1px solid #e8eaed' }}>
         <MarksTable
           subjectId={subjectId}
           className={className}
