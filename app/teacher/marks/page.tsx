@@ -1,5 +1,117 @@
-import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
+import getDb from '@/lib/db';
 
-export default function MarksIndexPage() {
-  redirect('/teacher');
+const NAVY = '#0d1b2a';
+const GOLD  = '#c9952a';
+
+interface Assignment {
+  subject_id: number;
+  subject_name: string;
+  subject_code: string;
+  class_name: string;
+  scored_count: number;
+  student_count: number;
+}
+
+function getAssignments(teacherId: number): Assignment[] {
+  return getDb().prepare(`
+    SELECT
+      ta.subject_id,
+      sub.name   AS subject_name,
+      sub.code   AS subject_code,
+      ta.class_name,
+      (SELECT COUNT(*) FROM students WHERE class_name = ta.class_name) AS student_count,
+      (SELECT COUNT(*) FROM scores sc
+       JOIN students st ON st.id = sc.student_id
+       WHERE sc.subject_id = ta.subject_id AND st.class_name = ta.class_name
+      ) AS scored_count
+    FROM teacher_assignments ta
+    JOIN subjects sub ON sub.id = ta.subject_id
+    WHERE ta.teacher_id = ?
+    ORDER BY ta.class_name, sub.name
+  `).all(teacherId) as Assignment[];
+}
+
+export default async function MarksPage() {
+  const session     = await getServerSession(authOptions);
+  const teacherId   = parseInt(session!.user.id);
+  const assignments = getAssignments(teacherId);
+
+  const byClass = assignments.reduce<Record<string, Assignment[]>>((acc, a) => {
+    (acc[a.class_name] ??= []).push(a);
+    return acc;
+  }, {});
+
+  return (
+    <div className="space-y-5">
+      <div>
+        <h1 className="text-xl font-bold text-gray-900">Marks Entry</h1>
+        <p className="text-sm text-gray-500 mt-0.5">Select a subject to enter or update scores.</p>
+      </div>
+
+      {assignments.length === 0 ? (
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+          <p className="text-gray-500">No subjects assigned yet.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {Object.entries(byClass).map(([className, subjects]) => (
+            <div key={className} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="px-4 py-3 flex items-center justify-between" style={{ backgroundColor: NAVY }}>
+                <span className="font-semibold text-white text-sm">{className}</span>
+                <span className="text-xs" style={{ color: GOLD }}>
+                  {subjects[0].student_count} student{subjects[0].student_count !== 1 ? 's' : ''}
+                </span>
+              </div>
+              <ul className="divide-y divide-gray-100">
+                {subjects.map((s) => {
+                  const done    = s.scored_count >= s.student_count && s.student_count > 0;
+                  const partial = s.scored_count > 0 && !done;
+                  return (
+                    <li key={s.subject_id}>
+                      <Link
+                        href={`/teacher/marks/${encodeURIComponent(className)}/${s.subject_id}`}
+                        className="flex items-center justify-between px-4 py-3.5 hover:bg-blue-50 transition-colors group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className="text-xs font-mono font-semibold px-2 py-0.5 rounded shrink-0"
+                            style={{ backgroundColor: GOLD + '1a', color: NAVY }}
+                          >
+                            {s.subject_code}
+                          </span>
+                          <span className="text-sm text-gray-800">{s.subject_name}</span>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          {done ? (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
+                              Done
+                            </span>
+                          ) : partial ? (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 font-medium">
+                              {s.scored_count}/{s.student_count}
+                            </span>
+                          ) : (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500 font-medium">
+                              Pending
+                            </span>
+                          )}
+                          <svg className="w-4 h-4 text-gray-300 group-hover:text-gray-500 transition-colors"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }

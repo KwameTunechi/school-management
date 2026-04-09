@@ -67,7 +67,7 @@ const SUMMARY_CARDS = (s: Stats) => [
           d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
       </svg>
     ),
-    href: '/admin/assignments',
+    href: '/admin/subjects',
     bg: '#fff7ed',
     accent: '#ea580c',
   },
@@ -87,10 +87,12 @@ const SUMMARY_CARDS = (s: Stats) => [
 ];
 
 const QUICK_LINKS = [
-  { href: '/',           label: 'View Student Reports',    desc: 'Browse and download terminal reports' },
+  { href: '/admin/reports',     label: 'Browse Reports',          desc: 'View and download terminal reports'   },
   { href: '/admin/teachers',    label: 'Manage Teachers',         desc: 'Add or edit teacher accounts'         },
-  { href: '/admin/assignments', label: 'Assign Subjects',         desc: 'Map teachers to classes and subjects' },
+  { href: '/admin/assignments', label: 'View Assignments',        desc: 'See all teacher–subject–class links'  },
   { href: '/admin/students',    label: 'Manage Students',         desc: 'Add, edit, or remove student records' },
+  { href: '/admin/subjects',    label: 'Manage Subjects',         desc: 'Add or edit subjects offered'         },
+  { href: '/admin/remarks',     label: 'Enter Remarks',           desc: 'Set head teacher remarks & next term' },
 ];
 
 export default function AdminDashboard() {
