@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# SQLite WAL mode temp files
+school.db-shm
+school.db-wal
+
+# Claude Code local config
+.claude/settings.json
