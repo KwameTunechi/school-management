@@ -51,31 +51,26 @@ export default async function AttendancePage(props: PageProps<'/teacher/attendan
   const errorMsg   = searchParams?.error   as string | undefined;
 
   return (
-    <div className="space-y-5">
+    <div>
+      <Link
+        href="/teacher/attendance"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold mb-5"
+        style={{ color: '#9ca3af' }}
+      >
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back
+      </Link>
 
-      {/* Back + header */}
-      <div>
-        <Link
-          href="/teacher/attendance"
-          className="inline-flex items-center gap-1 text-xs font-semibold mb-3 transition-colors"
-          style={{ color: '#9ca3af' }}
-        >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Attendance
-        </Link>
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold" style={{ color: '#0d1b2a' }}>Attendance</h1>
-            <p className="text-sm mt-0.5" style={{ color: '#9ca3af' }}>
-              {className} · {students.length} student{students.length !== 1 ? 's' : ''}
-            </p>
-          </div>
-        </div>
+      <div className="mb-5">
+        <h1 className="text-2xl font-bold" style={{ color: '#0d1b2a' }}>Attendance</h1>
+        <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>
+          {className} · {students.length} student{students.length !== 1 ? 's' : ''}
+        </p>
       </div>
 
-      <div className="bg-white rounded-2xl p-4 sm:p-6" style={{ border: '1px solid #e8eaed' }}>
+      <div className="bg-white rounded-2xl p-4 sm:p-6" style={{ border: '1px solid #ebebeb' }}>
         <AttendanceForm
           className={className}
           students={students}

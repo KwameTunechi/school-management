@@ -42,70 +42,56 @@ export default async function MarksPage() {
   }, {});
 
   return (
-    <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-bold" style={{ color: '#0d1b2a' }}>Marks Entry</h1>
-        <p className="text-sm mt-0.5" style={{ color: '#9ca3af' }}>Select a subject to enter or update scores.</p>
+    <div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold" style={{ color: '#0d1b2a' }}>Marks</h1>
+        <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>Select a subject to enter or update scores.</p>
       </div>
 
       {assignments.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 text-center" style={{ border: '1px solid #e8eaed' }}>
-          <p style={{ color: '#9ca3af' }}>No subjects assigned yet.</p>
+        <div className="bg-white rounded-2xl p-10 text-center" style={{ border: '1px solid #ebebeb' }}>
+          <p className="text-sm" style={{ color: '#9ca3af' }}>No subjects assigned yet.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {Object.entries(byClass).map(([className, subjects]) => (
-            <div key={className} className="bg-white rounded-2xl overflow-hidden" style={{ border: '1px solid #e8eaed' }}>
-              <div
-                className="px-5 py-3.5 flex items-center justify-between"
-                style={{ background: 'linear-gradient(135deg, #0d1b2a 0%, #132236 100%)' }}
-              >
-                <span className="font-bold text-white">{className}</span>
-                <span className="text-xs font-medium" style={{ color: 'rgba(201,149,42,0.85)' }}>
+            <div key={className} className="bg-white rounded-2xl overflow-hidden" style={{ border: '1px solid #ebebeb' }}>
+              <div className="px-5 py-3.5" style={{ borderBottom: '1px solid #f5f5f5' }}>
+                <h2 className="font-bold text-sm" style={{ color: '#0d1b2a' }}>{className}</h2>
+                <p className="text-xs mt-0.5" style={{ color: '#9ca3af' }}>
                   {subjects[0].student_count} student{subjects[0].student_count !== 1 ? 's' : ''}
-                </span>
+                </p>
               </div>
               <ul>
                 {subjects.map((s, i) => {
                   const done    = s.scored_count >= s.student_count && s.student_count > 0;
                   const partial = s.scored_count > 0 && !done;
                   return (
-                    <li key={s.subject_id} style={{ borderTop: i === 0 ? 'none' : '1px solid #f9fafb' }}>
+                    <li key={s.subject_id} style={{ borderTop: i === 0 ? 'none' : '1px solid #f9f9f9' }}>
                       <Link
                         href={`/teacher/marks/${encodeURIComponent(className)}/${s.subject_id}`}
-                        className="flex items-center justify-between px-5 py-3.5 transition-colors group hover:bg-blue-50/40"
+                        className="flex items-center justify-between px-5 py-3.5"
                       >
                         <div className="flex items-center gap-3">
                           <span
-                            className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-lg shrink-0"
-                            style={{ backgroundColor: 'rgba(201,149,42,0.1)', color: '#0d1b2a' }}
+                            className="text-[11px] font-mono font-semibold w-14 text-center py-0.5 rounded-md shrink-0"
+                            style={{ backgroundColor: '#f7f3ec', color: '#c9952a' }}
                           >
                             {s.subject_code}
                           </span>
-                          <span className="text-sm font-medium" style={{ color: '#374151' }}>{s.subject_name}</span>
+                          <span className="text-sm" style={{ color: '#374151' }}>{s.subject_name}</span>
                         </div>
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-2.5 shrink-0">
                           {done ? (
-                            <span className="text-xs px-2.5 py-1 rounded-lg font-semibold" style={{ backgroundColor: '#f0fdf4', color: '#16a34a' }}>
-                              Done
-                            </span>
+                            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md" style={{ backgroundColor: '#f0fdf4', color: '#16a34a' }}>Done</span>
                           ) : partial ? (
-                            <span className="text-xs px-2.5 py-1 rounded-lg font-semibold" style={{ backgroundColor: '#fefce8', color: '#ca8a04' }}>
-                              {s.scored_count}/{s.student_count}
-                            </span>
+                            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md" style={{ backgroundColor: '#fffbeb', color: '#d97706' }}>{s.scored_count}/{s.student_count}</span>
                           ) : (
-                            <span className="text-xs px-2.5 py-1 rounded-lg font-semibold" style={{ backgroundColor: '#f7f8fa', color: '#9ca3af' }}>
-                              Pending
-                            </span>
+                            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md" style={{ backgroundColor: '#f5f5f5', color: '#9ca3af' }}>Pending</span>
                           )}
-                          <div
-                            className="w-6 h-6 rounded-lg flex items-center justify-center"
-                            style={{ backgroundColor: '#f7f8fa' }}
-                          >
-                            <svg className="w-3 h-3" fill="none" stroke="#9ca3af" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </div>
+                          <svg className="w-4 h-4" fill="none" stroke="#d1d5db" strokeWidth={2} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                          </svg>
                         </div>
                       </Link>
                     </li>

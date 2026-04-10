@@ -63,51 +63,36 @@ export default async function MarksPage(props: PageProps<'/teacher/marks/[classI
   const errorMsg   = searchParams?.error   as string | undefined;
 
   return (
-    <div className="space-y-5">
-
-      {/* Back link */}
-      <div>
-        <Link
-          href="/teacher/marks"
-          className="inline-flex items-center gap-1 text-xs font-semibold mb-3 transition-colors"
-          style={{ color: '#9ca3af' }}
-        >
-          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Marks
-        </Link>
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-bold" style={{ color: '#0d1b2a' }}>Enter Marks</h1>
-            <div className="flex items-center gap-2 mt-1 flex-wrap">
-              <span
-                className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg"
-                style={{ backgroundColor: 'rgba(201,149,42,0.1)', color: '#0d1b2a' }}
-              >
-                {subject.code}
-              </span>
-              <span className="text-sm" style={{ color: '#9ca3af' }}>
-                {subject.name} · {className} · {students.length} student{students.length !== 1 ? 's' : ''}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scoring rules info banner */}
-      <div
-        className="rounded-xl px-4 py-3 text-xs flex flex-wrap gap-x-6 gap-y-1"
-        style={{ backgroundColor: 'rgba(201,149,42,0.08)', borderLeft: '3px solid #c9952a', color: '#6b7280' }}
+    <div>
+      <Link
+        href="/teacher/marks"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold mb-5"
+        style={{ color: '#9ca3af' }}
       >
-        <span><strong style={{ color: '#0d1b2a' }}>Class Score:</strong> 0 – 30</span>
-        <span><strong style={{ color: '#0d1b2a' }}>Exam Score:</strong> 0 – 70</span>
-        <span><strong style={{ color: '#0d1b2a' }}>Total:</strong> auto-calculated</span>
-        <span>Leave both blank to skip a student.</span>
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back
+      </Link>
+
+      <div className="mb-5">
+        <h1 className="text-2xl font-bold" style={{ color: '#0d1b2a' }}>{subject.name}</h1>
+        <p className="text-sm mt-1" style={{ color: '#9ca3af' }}>
+          {className} · {students.length} student{students.length !== 1 ? 's' : ''}
+        </p>
       </div>
 
-      {/* Marks table */}
-      <div className="bg-white rounded-2xl p-4 sm:p-6" style={{ border: '1px solid #e8eaed' }}>
+      {/* Scoring rules */}
+      <div
+        className="rounded-xl px-4 py-3 text-xs flex flex-wrap gap-x-5 gap-y-1 mb-4"
+        style={{ backgroundColor: '#f7f3ec', color: '#9ca3af' }}
+      >
+        <span>Class score: <strong style={{ color: '#0d1b2a' }}>0–30</strong></span>
+        <span>Exam score: <strong style={{ color: '#0d1b2a' }}>0–70</strong></span>
+        <span>Total is auto-calculated.</span>
+      </div>
+
+      <div className="bg-white rounded-2xl p-4 sm:p-6" style={{ border: '1px solid #ebebeb' }}>
         <MarksTable
           subjectId={subjectId}
           className={className}
